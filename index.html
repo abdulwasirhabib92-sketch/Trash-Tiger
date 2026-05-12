@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trash Tiger | Premium Eco-Solutions</title>
+    <title>Trash Tiger | Waste Management & Recycling - Tamale, Ghana</title>
     
     <!-- CSS STYLES -->
     <style>
@@ -20,6 +20,7 @@
             --dark-color: #2c3e50;
             --light-bg: #f4f7f6;
             --white: #ffffff;
+            --danger: #e74c3c;
         }
 
         body {
@@ -51,10 +52,7 @@
         .nav-links {
             list-style: none;
             display: flex;
-        }
-
-        .nav-links li {
-            margin-left: 20px;
+            gap: 2rem;
         }
 
         .nav-links a {
@@ -68,9 +66,37 @@
             color: var(--primary-color);
         }
 
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--dark-color);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
         /* Hero Section */
         .hero {
-            height: 80vh;
+            min-height: 80vh;
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
                         url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&q=80&w=1470&ixlib=rb-4.0.3') no-repeat center center/cover;
             display: flex;
@@ -79,13 +105,18 @@
             align-items: center;
             text-align: center;
             color: white;
-            padding: 0 20px;
+            padding: 20px;
             margin-top: 60px;
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
         }
 
         .btn {
@@ -99,17 +130,22 @@
             border: none;
             cursor: pointer;
             font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #27ae60;
         }
 
         /* Section Styling */
         section {
-            padding: 80px 10%;
+            padding: 50px 5%;
             text-align: center;
         }
 
         h2 {
             margin-bottom: 40px;
-            font-size: 2.5rem;
+            font-size: 2rem;
             position: relative;
         }
 
@@ -127,6 +163,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
+            margin-top: 30px;
         }
 
         .product-card {
@@ -143,6 +180,7 @@
 
         .product-card h3 {
             margin: 15px 0;
+            color: var(--primary-color);
         }
 
         /* Forms */
@@ -155,12 +193,13 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        .auth-container input {
+        .auth-container input, .auth-container textarea {
             width: 100%;
             padding: 12px;
             margin: 10px 0;
             border: 1px solid #ddd;
             border-radius: 5px;
+            font-size: 1rem;
         }
 
         .toggle-form {
@@ -176,19 +215,159 @@
             color: white;
             padding: 40px;
             border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .contact-info p {
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+
+        .contact-info a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
         }
 
         footer {
             text-align: center;
             padding: 20px;
             background: #eee;
+            margin-top: 40px;
+        }
+
+        /* About Section */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            line-height: 1.8;
+        }
+
+        .about-content p {
+            margin: 15px 0;
+        }
+
+        .service-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .service-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .service-item h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
         }
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
-            .nav-links { display: none; } /* Simplified for single file demo */
-            .hero h1 { font-size: 2rem; }
-            section { padding: 50px 5%; }
+            .nav-links {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: var(--white);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0,0,0,0.1);
+                padding: 20px 0;
+                gap: 0;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 15px 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+            }
+
+            section {
+                padding: 30px 5%;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .product-container {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-container {
+                margin: 20px 0;
+                padding: 20px;
+            }
+
+            .contact-info {
+                padding: 20px;
+                text-align: center;
+            }
+
+            .contact-info p {
+                margin: 10px 0;
+                font-size: 1rem;
+            }
+
+            .about-content {
+                text-align: center;
+            }
+
+            .service-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .hero {
+                min-height: 60vh;
+                margin-top: 70px;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -196,40 +375,81 @@
 
     <!-- NAVIGATION -->
     <nav>
-        <div class="logo">Trash Tiger</div>
-        <ul class="nav-links">
+        <div class="logo">🐯 Trash Tiger</div>
+        <ul class="nav-links" id="navLinks">
             <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
             <li><a href="#products">Products</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </nav>
 
     <!-- HOME SECTION -->
     <header id="home" class="hero">
         <h1>Welcome to Trash Tiger</h1>
-        <p>Premium solutions for your lifestyle and business.</p>
-        <a href="#products" class="btn">View Our Collection</a>
+        <p>Premium Waste Management & Recycling Solutions</p>
+        <p style="font-size: 0.95rem; margin-top: 10px;">Tamale, Ghana</p>
+        <a href="#products" class="btn">Explore Our Products</a>
     </header>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" style="background-color: #fff;">
+        <h2>Our Services</h2>
+        <div class="service-list">
+            <div class="service-item">
+                <h4>♻️ Waste Management</h4>
+                <p>Comprehensive waste collection and management solutions for homes and businesses</p>
+            </div>
+            <div class="service-item">
+                <h4>🔄 Recycling</h4>
+                <p>Transform waste into valuable resources through our professional recycling services</p>
+            </div>
+            <div class="service-item">
+                <h4>🌱 Eco-Solutions</h4>
+                <p>Sustainable products that help you reduce your environmental footprint</p>
+            </div>
+        </div>
+    </section>
 
     <!-- PRODUCTS SECTION -->
     <section id="products">
         <h2>Our Products</h2>
         <div class="product-container">
             <div class="product-card">
-                <h3>Industrial Tiger Bags</h3>
-                <p>Heavy duty, eco-friendly bags designed for durability.</p>
-                <button class="btn">Add to Cart</button>
+                <h3>🥚 Egg Trays</h3>
+                <p>Eco-friendly recycled egg trays made from sustainable materials.</p>
+                <button class="btn">Learn More</button>
             </div>
             <div class="product-card">
-                <h3>Eco-Sorters</h3>
-                <p>Modern waste management tools for the stylish home.</p>
-                <button class="btn">Add to Cart</button>
+                <h3>📄 Paper Products</h3>
+                <p>High-quality recycled paper for various applications.</p>
+                <button class="btn">Learn More</button>
             </div>
             <div class="product-card">
-                <h3>Tiger Kit</h3>
-                <p>Everything you need to stay organized and clean.</p>
-                <button class="btn">Add to Cart</button>
+                <h3>🧻 Toilet Paper</h3>
+                <p>Soft, eco-friendly toilet paper made from recycled materials.</p>
+                <button class="btn">Learn More</button>
+            </div>
+            <div class="product-card">
+                <h3>🎨 Paint Products</h3>
+                <p>Eco-conscious paint solutions for your home and business projects.</p>
+                <button class="btn">Learn More</button>
+            </div>
+            <div class="product-card">
+                <h3>♻️ Plastic Recycled Products</h3>
+                <p>Innovative products crafted from recycled plastic waste.</p>
+                <button class="btn">Learn More</button>
+            </div>
+            <div class="product-card">
+                <h3>📦 Custom Solutions</h3>
+                <p>Tailored recycling solutions for your specific needs.</p>
+                <button class="btn">Learn More</button>
             </div>
         </div>
     </section>
@@ -237,70 +457,72 @@
     <!-- ABOUT SECTION -->
     <section id="about" style="background-color: #fff;">
         <h2>About Trash Tiger</h2>
-        <p style="max-width: 800px; margin: 0 auto;">
-            Trash Tiger is a modern brand located in [ENTER YOUR LOCATION]. We specialize in high-quality products including bags, lifestyle tools, and eco-solutions. Our mission is to provide [ENTER WHAT YOU SELL] that combine functionality with modern design for our local community.
-        </p>
-    </section>
-
-    <!-- AUTHENTICATION SECTION (SIGN UP / LOGIN) -->
-    <section id="auth">
-        <div class="auth-container" id="loginBox">
-            <h2>Login</h2>
-            <form onsubmit="handleAuth(event, 'Login')">
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
-                <button type="submit" class="btn">Login</button>
-            </form>
-            <p class="toggle-form" onclick="toggleAuth()">Don't have an account? Sign Up</p>
-        </div>
-
-        <div class="auth-container" id="signUpBox" style="display: none;">
-            <h2>Sign Up</h2>
-            <form onsubmit="handleAuth(event, 'Sign Up')">
-                <input type="text" placeholder="Full Name" required>
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
-                <button type="submit" class="btn">Create Account</button>
-            </form>
-            <p class="toggle-form" onclick="toggleAuth()">Already have an account? Login</p>
+        <div class="about-content">
+            <p>
+                Based in <strong>Tamale, Ghana</strong>, Trash Tiger is a leading waste management and recycling company dedicated to creating sustainable solutions for our community. We believe in turning waste into opportunity and resources into value.
+            </p>
+            <p>
+                Our mission is to provide premium recycled products while promoting environmental responsibility and creating a cleaner, greener future for Tamale and beyond.
+            </p>
+            <h4 style="color: var(--primary-color); margin-top: 30px;">Why Choose Trash Tiger?</h4>
+            <ul style="text-align: left; max-width: 600px; margin: 20px auto;">
+                <li>✅ Premium quality recycled products</li>
+                <li>✅ Environmentally responsible practices</li>
+                <li>✅ Professional waste management services</li>
+                <li>✅ Competitive pricing</li>
+                <li>✅ Local expertise in Tamale</li>
+            </ul>
         </div>
     </section>
 
     <!-- CONTACT SECTION -->
     <section id="contact">
-        <h2>Contact Us</h2>
+        <h2>Get In Touch</h2>
         <div class="contact-info">
-            <p><strong>📍 Location:</strong> [ENTER YOUR LOCATION]</p>
-            <p><strong>📞 Phone:</strong> [ENTER YOUR PHONE NUMBER]</p>
-            <p><strong>✉️ Email:</strong> [ENTER YOUR EMAIL]</p>
+            <p><strong>📍 Location:</strong><br>Tamale, Ghana</p>
+            <p><strong>📞 Phone:</strong><br><a href="tel:0591808780">0591808780</a></p>
+            <p><strong>🏢 Services:</strong><br>Waste Management & Recycling</p>
+            <p style="margin-top: 30px; border-top: 2px solid var(--primary-color); padding-top: 20px;">
+                <strong>Have a question?</strong><br>
+                Contact us today for information about our products and services. We're here to help you make sustainable choices!
+            </p>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2023 Trash Tiger. All rights reserved.</p>
+        <p>&copy; 2026 Trash Tiger - Premium Waste Management & Recycling | Tamale, Ghana</p>
+        <p style="font-size: 0.9rem; margin-top: 10px;">Call: <strong>0591808780</strong> | Building a sustainable future together 🌍</p>
     </footer>
 
     <!-- JAVASCRIPT -->
     <script>
-        // Function to switch between Login and Sign Up forms
-        function toggleAuth() {
-            const loginBox = document.getElementById('loginBox');
-            const signUpBox = document.getElementById('signUpBox');
-            
-            if (loginBox.style.display === "none") {
-                loginBox.style.display = "block";
-                signUpBox.style.display = "none";
-            } else {
-                loginBox.style.display = "none";
-                signUpBox.style.display = "block";
-            }
-        }
+        // Mobile Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
 
-        // Function to handle the form submission
-        function handleAuth(event, type) {
-            event.preventDefault(); // Prevents the page from refreshing
-            alert("Welcome to Trash Tiger! You have successfully performed a " + type + ".");
-        }
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('#navLinks a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
     </script>
 </body>
 </html>
