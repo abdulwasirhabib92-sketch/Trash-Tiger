@@ -20,7 +20,7 @@ box-shadow:0 3px 15px rgba(0,0,0,0.2);
 .logo{font-size:1.5rem;font-weight:bold;color:#2ecc71;}
 
 .nav-links{display:flex;gap:25px;list-style:none;}
-.nav-links a{color:white;text-decoration:none;font-weight:500;transition:0.3s;}
+.nav-links a{color:white;text-decoration:none;font-weight:500;transition:0.3s;cursor:pointer;}
 .nav-links a:hover{color:#2ecc71;}
 
 .hamburger{display:none;flex-direction:column;cursor:pointer;gap:5px;}
@@ -62,10 +62,10 @@ display:block;text-align:left;font-weight:500;
 margin-bottom:8px;color:#1f2d3d;
 }
 
-select,input{
+select,input,textarea{
 padding:12px;margin:10px 0;width:100%;
 border:1px solid #ddd;border-radius:5px;
-font-size:1rem;
+font-size:1rem;font-family:inherit;
 }
 
 select{background:white;cursor:pointer;}
@@ -79,6 +79,9 @@ transition:0.3s;margin:10px 5px;
 }
 
 button:hover{background:#27ae60;transform:translateY(-2px);}
+
+button.danger{background:#e74c3c;}
+button.danger:hover{background:#c0392b;}
 
 /* GRID */
 .grid{
@@ -98,13 +101,13 @@ transition:0.3s;
 .card p{color:#666;font-size:0.95rem;}
 
 /* DASHBOARD */
-#dashboard{
+#dashboard,#admin-panel{
 background:white;padding:30px;margin:30px auto;
 border-radius:10px;max-width:800px;
 box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
-#orders{
+#orders,#admin-content{
 text-align:left;border-top:2px solid #2ecc71;
 padding-top:20px;margin-top:20px;
 }
@@ -131,6 +134,24 @@ border-radius:8px;text-align:center;
 
 .stat-box h4{font-size:2rem;margin:10px 0;}
 
+/* LOGIN SCREEN */
+#loginScreen{
+position:fixed;width:100%;height:100%;
+background:rgba(0,0,0,0.8);
+display:flex;justify-content:center;align-items:center;
+z-index:2000;
+}
+
+.login-box{
+background:white;padding:40px;border-radius:10px;
+text-align:center;width:300px;box-shadow:0 5px 30px rgba(0,0,0,0.3);
+}
+
+.login-box h2{border:none;color:#1f2d3d;}
+.login-box h2::after{display:none;}
+
+.login-box input{width:100%;padding:12px;margin:15px 0;border:1px solid #ddd;border-radius:5px;}
+
 /* FOOTER */
 footer{
 background:#1f2d3d;color:white;padding:30px 5%;
@@ -150,6 +171,8 @@ text-align:left;line-height:1.8;
 .contact-info p{margin:15px 0;font-size:1.1rem;}
 .contact-info a{color:#2ecc71;text-decoration:none;font-weight:bold;}
 .contact-info a:hover{text-decoration:underline;}
+
+.hidden{display:none;}
 
 /* MOBILE */
 @media(max-width:768px){
@@ -176,6 +199,8 @@ select,input{width:100%;}
 
 .order-item{flex-direction:column;align-items:flex-start;}
 .order-total{margin-top:10px;}
+
+.login-box{width:90%;max-width:300px;}
 }
 
 @media(max-width:480px){
@@ -188,14 +213,26 @@ button{padding:10px 20px;font-size:0.9rem;}
 
 <body>
 
+<!-- LOGIN SCREEN FOR ADMIN -->
+<div id="loginScreen" class="hidden">
+<div class="login-box">
+<h2>🔐 Admin Login</h2>
+<p>Enter your password to access admin panel</p>
+<input type="password" id="adminPassword" placeholder="Admin Password">
+<button onclick="adminLogin()">Login</button>
+<p style="margin-top:20px;font-size:0.9rem;color:#666;">For customers: Use the menu to access public features</p>
+</div>
+</div>
+
 <!-- NAV -->
 <nav>
-<div class="logo">🐯 Trash Tiger Business</div>
+<div class="logo">🐯 Trash Tiger</div>
 <ul class="nav-links" id="navLinks">
 <li><a href="#home">Home</a></li>
 <li><a href="#order">Order</a></li>
 <li><a href="#dashboard">Dashboard</a></li>
 <li><a href="#contact">Contact</a></li>
+<li><a onclick="openAdminPanel()" style="color:#ff9800;cursor:pointer;">⚙️ Admin</a></li>
 </ul>
 <div class="hamburger" id="hamburger">
 <span></span>
@@ -208,53 +245,16 @@ button{padding:10px 20px;font-size:0.9rem;}
 <div id="home" class="hero">
 <h1>Trash Tiger Business Platform</h1>
 <p>Premium Waste Management & Recycling Solutions</p>
-<p style="font-size:0.95rem;margin-top:10px;">📍 Tamale, Ghana | 📞 0591808780</p>
+<div id="heroContact">
+<p style="font-size:0.95rem;margin-top:10px;">📍 <span id="heroAddress">Tamale, Ghana</span> | 📞 <span id="heroPhone">0591808780</span></p>
+</div>
 <button onclick="scrollToOrder()" style="background:#2ecc71;margin-top:20px;">Start Ordering</button>
 </div>
 
 <!-- PRODUCTS INFO -->
 <section id="products">
 <h2>Our Products</h2>
-
-<div class="grid">
-
-<div class="card">
-<h3>🥚 Egg Trays</h3>
-<p>Eco-friendly recycled egg cartons. Strong and durable.</p>
-<p style="font-weight:bold;color:#2ecc71;margin-top:10px;">GHS 15</p>
-</div>
-
-<div class="card">
-<h3>📄 Paper Products</h3>
-<p>High-quality recycled paper sheets and notebooks.</p>
-<p style="font-weight:bold;color:#2ecc71;margin-top:10px;">GHS 10</p>
-</div>
-
-<div class="card">
-<h3>🧻 Toilet Paper</h3>
-<p>Soft eco-friendly toilet paper rolls.</p>
-<p style="font-weight:bold;color:#2ecc71;margin-top:10px;">GHS 8</p>
-</div>
-
-<div class="card">
-<h3>🎨 Paint Products</h3>
-<p>Eco-conscious paint solutions for projects.</p>
-<p style="font-weight:bold;color:#2ecc71;margin-top:10px;">GHS 25</p>
-</div>
-
-<div class="card">
-<h3>🗑️ Plastic Waste Bins</h3>
-<p>Durable recycled plastic waste bins.</p>
-<p style="font-weight:bold;color:#2ecc71;margin-top:10px;">GHS 35</p>
-</div>
-
-<div class="card">
-<h3>🪣 Plastic Buckets</h3>
-<p>Heavy-duty recycled plastic buckets.</p>
-<p style="font-weight:bold;color:#2ecc71;margin-top:10px;">GHS 20</p>
-</div>
-
-</div>
+<div class="grid" id="productsGrid"></div>
 </section>
 
 <!-- ORDER FORM -->
@@ -264,14 +264,7 @@ button{padding:10px 20px;font-size:0.9rem;}
 <div class="order-form">
 <div class="form-group">
 <label>Select Product:</label>
-<select id="product">
-<option value="Egg Trays">🥚 Egg Trays - GHS 15</option>
-<option value="Paper">📄 Paper Products - GHS 10</option>
-<option value="Toilet Paper">🧻 Toilet Paper - GHS 8</option>
-<option value="Paint">🎨 Paint Products - GHS 25</option>
-<option value="Plastic Waste Bins">🗑️ Plastic Waste Bins - GHS 35</option>
-<option value="Plastic Buckets">🪣 Plastic Buckets - GHS 20</option>
-</select>
+<select id="product"></select>
 </div>
 
 <div class="form-group">
@@ -307,11 +300,11 @@ button{padding:10px 20px;font-size:0.9rem;}
 <section id="contact">
 <h2>Contact Us</h2>
 
-<div class="contact-info">
-<p><strong>📍 Location:</strong><br>Tamale, Ghana</p>
-<p><strong>📞 Phone:</strong><br><a href="tel:0591808780">0591808780</a></p>
-<p><strong>💰 Mobile Money:</strong><br>0591808780 (Trash Tiger)</p>
-<p><strong>🏢 Services:</strong><br>Waste Management & Recycling</p>
+<div class="contact-info" id="contactInfo">
+<p><strong>📍 Location:</strong><br><span id="contactAddress">Tamale, Ghana</span></p>
+<p><strong>📞 Phone:</strong><br><a id="contactPhone" href="tel:0591808780">0591808780</a></p>
+<p><strong>📧 Email:</strong><br><a id="contactEmail" href="mailto:contact@trashtiger.com">contact@trashtiger.com</a></p>
+<p><strong>💰 Mobile Money:</strong><br><span id="contactMomo">0591808780 (Trash Tiger)</span></p>
 
 <p style="margin-top:30px;border-top:2px solid #2ecc71;padding-top:20px;">
 <strong>Ready to order?</strong><br>
@@ -323,14 +316,61 @@ Contact us via WhatsApp or call for bulk orders and special inquiries!
 
 </section>
 
+<!-- ADMIN PANEL -->
+<section id="admin-panel" class="hidden">
+<h2>⚙️ Admin Panel</h2>
+
+<div id="admin-content">
+
+<h3 style="margin:20px 0;color:#1f2d3d;text-align:left;">Business Information</h3>
+
+<div class="form-group">
+<label>Business Address:</label>
+<input type="text" id="adminAddress" placeholder="Enter address">
+</div>
+
+<div class="form-group">
+<label>Phone Number:</label>
+<input type="text" id="adminPhone" placeholder="Enter phone">
+</div>
+
+<div class="form-group">
+<label>Email Address:</label>
+<input type="email" id="adminEmail" placeholder="Enter email">
+</div>
+
+<div class="form-group">
+<label>Mobile Money (MoMo):</label>
+<input type="text" id="adminMomo" placeholder="Enter MoMo details">
+</div>
+
+<button onclick="saveBusinessInfo()" style="width:100%;margin-top:20px;">Save Business Info</button>
+
+<h3 style="margin:30px 0 20px 0;color:#1f2d3d;text-align:left;border-top:2px solid #2ecc71;padding-top:20px;">Manage Products</h3>
+
+<div id="adminProducts"></div>
+
+<button onclick="addProduct()" style="width:100%;margin-top:20px;background:#ff9800;">+ Add New Product</button>
+
+<h3 style="margin:30px 0 20px 0;color:#1f2d3d;text-align:left;border-top:2px solid #2ecc71;padding-top:20px;">Danger Zone</h3>
+
+<button onclick="clearAllOrders()" class="danger" style="width:100%;margin-top:20px;">Clear All Orders</button>
+<button onclick="logoutAdmin()" class="danger" style="width:100%;margin-top:10px;">Logout</button>
+
+</div>
+</section>
+
 <!-- FOOTER -->
 <footer>
-<p>&copy; 2026 Trash Tiger - Premium Waste Management & Recycling | Tamale, Ghana</p>
-<p>📞 Call: <strong>0591808780</strong> | Building a sustainable future together 🌍</p>
+<p>&copy; 2026 Trash Tiger - Premium Waste Management & Recycling</p>
+<p id="footerAddress">Tamale, Ghana | 📞 <span id="footerPhone">0591808780</span></p>
 </footer>
 
 <!-- SCRIPT -->
 <script>
+
+// Admin Password (Change this to your own secure password)
+const ADMIN_PASSWORD = "admin2026";
 
 // Mobile Menu Toggle
 const hamburger = document.getElementById('hamburger');
@@ -348,15 +388,158 @@ navLinks.classList.remove('active');
 });
 });
 
-// Prices
-let prices={
-"Egg Trays":15,
-"Paper":10,
-"Toilet Paper":8,
-"Paint":25,
-"Plastic Waste Bins":35,
-"Plastic Buckets":20
+// Default Business Info
+let businessInfo = {
+address: "Tamale, Ghana",
+phone: "0591808780",
+email: "contact@trashtiger.com",
+momo: "0591808780 (Trash Tiger)"
 };
+
+// Default Products
+let products = [
+{name: "Egg Trays", price: 15},
+{name: "Paper", price: 10},
+{name: "Toilet Paper", price: 8},
+{name: "Paint", price: 25},
+{name: "Plastic Waste Bins", price: 35},
+{name: "Plastic Buckets", price: 20}
+];
+
+// Load data from localStorage
+function loadData() {
+let saved = localStorage.getItem("businessInfo");
+if(saved) businessInfo = JSON.parse(saved);
+
+let savedProducts = localStorage.getItem("products");
+if(savedProducts) products = JSON.parse(savedProducts);
+
+updateDisplay();
+}
+
+// Update all displays
+function updateDisplay() {
+// Update products grid
+let grid = document.getElementById("productsGrid");
+let html = "";
+products.forEach(p => {
+html += `<div class="card"><h3>📦 ${p.name}</h3><p>Premium recycled product</p><p style="font-weight:bold;color:#2ecc71;">GHS ${p.price}</p></div>`;
+});
+grid.innerHTML = html;
+
+// Update product select
+let select = document.getElementById("product");
+select.innerHTML = "";
+products.forEach(p => {
+select.innerHTML += `<option value="${p.name}">📦 ${p.name} - GHS ${p.price}</option>`;
+});
+
+// Update contact info
+document.getElementById("heroAddress").innerText = businessInfo.address;
+document.getElementById("heroPhone").innerText = businessInfo.phone;
+document.getElementById("contactAddress").innerText = businessInfo.address;
+document.getElementById("contactPhone").href = `tel:${businessInfo.phone}`;
+document.getElementById("contactPhone").innerText = businessInfo.phone;
+document.getElementById("contactEmail").href = `mailto:${businessInfo.email}`;
+document.getElementById("contactEmail").innerText = businessInfo.email;
+document.getElementById("contactMomo").innerText = businessInfo.momo;
+document.getElementById("footerAddress").innerText = `${businessInfo.address} | 📞 ${businessInfo.phone}`;
+
+// Update admin form
+document.getElementById("adminAddress").value = businessInfo.address;
+document.getElementById("adminPhone").value = businessInfo.phone;
+document.getElementById("adminEmail").value = businessInfo.email;
+document.getElementById("adminMomo").value = businessInfo.momo;
+
+// Update admin products
+updateAdminProducts();
+
+displayOrders();
+}
+
+// Admin Login
+function adminLogin() {
+let pass = document.getElementById("adminPassword").value;
+if(pass === ADMIN_PASSWORD) {
+localStorage.setItem("adminLogged", "true");
+document.getElementById("loginScreen").classList.add("hidden");
+loadData();
+} else {
+alert("Incorrect password!");
+}
+}
+
+// Open Admin Panel
+function openAdminPanel() {
+if(!localStorage.getItem("adminLogged")) {
+document.getElementById("loginScreen").classList.remove("hidden");
+} else {
+document.getElementById("admin-panel").classList.remove("hidden");
+document.getElementById("admin-panel").scrollIntoView({behavior:'smooth'});
+}
+}
+
+// Save Business Info
+function saveBusinessInfo() {
+businessInfo = {
+address: document.getElementById("adminAddress").value,
+phone: document.getElementById("adminPhone").value,
+email: document.getElementById("adminEmail").value,
+momo: document.getElementById("adminMomo").value
+};
+localStorage.setItem("businessInfo", JSON.stringify(businessInfo));
+updateDisplay();
+alert("Business information updated!");
+}
+
+// Update Admin Products Display
+function updateAdminProducts() {
+let html = "";
+products.forEach((p, index) => {
+html += `
+<div style="background:#f9fafb;padding:15px;margin:10px 0;border-radius:8px;display:flex;gap:10px;align-items:center;justify-content:space-between;">
+<div style="flex:1;">
+<input type="text" value="${p.name}" id="prodName${index}" placeholder="Product name" style="margin:5px 0;width:100%;">
+<input type="number" value="${p.price}" id="prodPrice${index}" placeholder="Price" style="margin:5px 0;width:100%;">
+</div>
+<button onclick="updateProduct(${index})" style="margin:5px;">Update</button>
+<button onclick="deleteProduct(${index})" class="danger" style="margin:5px;">Delete</button>
+</div>
+`;
+});
+document.getElementById("adminProducts").innerHTML = html;
+}
+
+// Update Product
+function updateProduct(index) {
+products[index].name = document.getElementById("prodName"+index).value;
+products[index].price = parseInt(document.getElementById("prodPrice"+index).value);
+localStorage.setItem("products", JSON.stringify(products));
+updateDisplay();
+alert("Product updated!");
+}
+
+// Delete Product
+function deleteProduct(index) {
+if(confirm("Delete this product?")) {
+products.splice(index, 1);
+localStorage.setItem("products", JSON.stringify(products));
+updateDisplay();
+alert("Product deleted!");
+}
+}
+
+// Add Product
+function addProduct() {
+let name = prompt("Enter product name:");
+if(!name) return;
+let price = prompt("Enter product price (GHS):");
+if(!price) return;
+products.push({name, price: parseInt(price)});
+localStorage.setItem("products", JSON.stringify(products));
+updateDisplay();
+alert("Product added!");
+}
 
 // Place Order
 function placeOrder(){
@@ -365,7 +548,8 @@ let qty=document.getElementById("qty").value;
 
 if(!qty || qty<=0){alert("Enter valid quantity");return;}
 
-let total=prices[product]*qty;
+let price = products.find(p => p.name === product)?.price || 0;
+let total = price * qty;
 
 let order={
 product,
@@ -382,7 +566,7 @@ displayOrders();
 
 let msg=`Hello Trash Tiger, I want to order:\n\nProduct: ${product}\nQuantity: ${qty}\nTotal: GHS ${total}\n\nPlease confirm my order.`;
 
-window.open(`https://wa.me/233591808780?text=${encodeURIComponent(msg)}`);
+window.open(`https://wa.me/233${businessInfo.phone.replace(/^0/, '')}?text=${encodeURIComponent(msg)}`);
 }
 
 // Display Orders
@@ -417,13 +601,30 @@ document.getElementById("totalOrders").innerText=orders.length;
 document.getElementById("totalRevenue").innerText="GHS "+totalRevenue;
 }
 
+// Clear Orders
+function clearAllOrders(){
+if(confirm("Clear all orders? This cannot be undone!")){
+localStorage.removeItem("orders");
+displayOrders();
+alert("All orders cleared!");
+}
+}
+
+// Logout Admin
+function logoutAdmin(){
+localStorage.removeItem("adminLogged");
+document.getElementById("admin-panel").classList.add("hidden");
+alert("Logged out!");
+location.reload();
+}
+
 // Scroll Function
 function scrollToOrder(){
 document.getElementById("order").scrollIntoView({behavior:'smooth'});
 }
 
-// Load on start
-displayOrders();
+// Initialize
+loadData();
 
 </script>
 
