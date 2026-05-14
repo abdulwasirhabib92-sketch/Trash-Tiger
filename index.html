@@ -138,8 +138,12 @@ border-radius:8px;text-align:center;
 #loginScreen{
 position:fixed;width:100%;height:100%;
 background:rgba(0,0,0,0.8);
-display:flex;justify-content:center;align-items:center;
+display:none;justify-content:center;align-items:center;
 z-index:2000;
+}
+
+#loginScreen.show{
+display:flex;
 }
 
 .login-box{
@@ -214,13 +218,14 @@ button{padding:10px 20px;font-size:0.9rem;}
 <body>
 
 <!-- LOGIN SCREEN FOR ADMIN -->
-<div id="loginScreen" class="hidden">
+<div id="loginScreen">
 <div class="login-box">
 <h2>🔐 Admin Login</h2>
 <p>Enter your password to access admin panel</p>
 <input type="password" id="adminPassword" placeholder="Admin Password">
 <button onclick="adminLogin()">Login</button>
-<p style="margin-top:20px;font-size:0.9rem;color:#666;">For customers: Use the menu to access public features</p>
+<button onclick="closeLoginScreen()" style="background:#999;">Cancel</button>
+<p style="margin-top:20px;font-size:0.9rem;color:#666;">Default password: admin2026</p>
 </div>
 </div>
 
@@ -232,7 +237,7 @@ button{padding:10px 20px;font-size:0.9rem;}
 <li><a href="#order">Order</a></li>
 <li><a href="#dashboard">Dashboard</a></li>
 <li><a href="#contact">Contact</a></li>
-<li><a onclick="openAdminPanel()" style="color:#ff9800;cursor:pointer;">⚙️ Admin</a></li>
+<li><a onclick="openAdminPanel()" style="color:#ff9800;">⚙️ Admin</a></li>
 </ul>
 <div class="hamburger" id="hamburger">
 <span></span>
@@ -459,20 +464,33 @@ displayOrders();
 
 // Admin Login
 function adminLogin() {
-let pass = document.getElementById("adminPassword").value;
+let pass = document.getElementById("adminPassword").value.trim();
+console.log("Password entered:", pass);
+console.log("Expected password:", ADMIN_PASSWORD);
+
 if(pass === ADMIN_PASSWORD) {
 localStorage.setItem("adminLogged", "true");
-document.getElementById("loginScreen").classList.add("hidden");
+document.getElementById("loginScreen").classList.remove("show");
+document.getElementById("admin-panel").classList.remove("hidden");
+document.getElementById("admin-panel").scrollIntoView({behavior:'smooth'});
 loadData();
 } else {
-alert("Incorrect password!");
+alert("❌ Incorrect password! Default is: admin2026");
+document.getElementById("adminPassword").value = "";
 }
+}
+
+// Close Login Screen
+function closeLoginScreen() {
+document.getElementById("loginScreen").classList.remove("show");
+document.getElementById("adminPassword").value = "";
 }
 
 // Open Admin Panel
 function openAdminPanel() {
 if(!localStorage.getItem("adminLogged")) {
-document.getElementById("loginScreen").classList.remove("hidden");
+document.getElementById("loginScreen").classList.add("show");
+document.getElementById("adminPassword").focus();
 } else {
 document.getElementById("admin-panel").classList.remove("hidden");
 document.getElementById("admin-panel").scrollIntoView({behavior:'smooth'});
@@ -489,7 +507,7 @@ momo: document.getElementById("adminMomo").value
 };
 localStorage.setItem("businessInfo", JSON.stringify(businessInfo));
 updateDisplay();
-alert("Business information updated!");
+alert("✅ Business information updated!");
 }
 
 // Update Admin Products Display
@@ -516,7 +534,7 @@ products[index].name = document.getElementById("prodName"+index).value;
 products[index].price = parseInt(document.getElementById("prodPrice"+index).value);
 localStorage.setItem("products", JSON.stringify(products));
 updateDisplay();
-alert("Product updated!");
+alert("✅ Product updated!");
 }
 
 // Delete Product
@@ -525,7 +543,7 @@ if(confirm("Delete this product?")) {
 products.splice(index, 1);
 localStorage.setItem("products", JSON.stringify(products));
 updateDisplay();
-alert("Product deleted!");
+alert("✅ Product deleted!");
 }
 }
 
@@ -538,7 +556,7 @@ if(!price) return;
 products.push({name, price: parseInt(price)});
 localStorage.setItem("products", JSON.stringify(products));
 updateDisplay();
-alert("Product added!");
+alert("✅ Product added!");
 }
 
 // Place Order
@@ -606,7 +624,7 @@ function clearAllOrders(){
 if(confirm("Clear all orders? This cannot be undone!")){
 localStorage.removeItem("orders");
 displayOrders();
-alert("All orders cleared!");
+alert("✅ All orders cleared!");
 }
 }
 
@@ -614,7 +632,7 @@ alert("All orders cleared!");
 function logoutAdmin(){
 localStorage.removeItem("adminLogged");
 document.getElementById("admin-panel").classList.add("hidden");
-alert("Logged out!");
+alert("✅ Logged out!");
 location.reload();
 }
 
@@ -622,6 +640,15 @@ location.reload();
 function scrollToOrder(){
 document.getElementById("order").scrollIntoView({behavior:'smooth'});
 }
+
+// Allow Enter key to login
+document.addEventListener('DOMContentLoaded', function() {
+document.getElementById("adminPassword").addEventListener("keypress", function(event) {
+if (event.key === "Enter") {
+adminLogin();
+}
+});
+});
 
 // Initialize
 loadData();
